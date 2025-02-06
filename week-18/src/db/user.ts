@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 /*
@@ -10,9 +10,21 @@ const prisma = new PrismaClient();
  *   name: string
  * }
  */
-export async function createUser(username: string, password: string, name: string) {
-    // Insert a new user into the users table
+export async function createUser(
+  username: string,
+  password: string,
+  name: string
+) {
+  // Insert a new user into the users table
+  const result = await prisma.user.create({
+    data: {
+      username,
+      password,
+      name,
+    },
+  });
 
+  return result;
 }
 /*
  * Should return the User object
@@ -23,6 +35,12 @@ export async function createUser(username: string, password: string, name: strin
  * }
  */
 export async function getUser(userId: number) {
-    // Retrieve a user by ID from the users table
+  // Retrieve a user by ID from the users table
+  const result = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+  });
 
+  return result;
 }

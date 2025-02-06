@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
@@ -24,7 +24,19 @@ export async function createTravelPlan(
   endDate: string,
   budget: number
 ) {
- 
+  const result = await prisma.travelPlan.create({
+    data: {
+      title,
+      destinationCity,
+      destinationCountry,
+      startDate: new Date(startDate),
+      endDate: new Date(endDate),
+      budget,
+      userId,
+    },
+  });
+
+  return result;
 }
 
 /*
@@ -36,7 +48,17 @@ export async function updateTravelPlan(
   title?: string,
   budget?: number
 ) {
- 
+  const result = await prisma.travelPlan.update({
+    where: {
+      id: planId,
+    },
+    data: {
+      title,
+      budget,
+    },
+  });
+
+  return result;
 }
 
 /*
@@ -53,5 +75,20 @@ export async function updateTravelPlan(
  * }]
  */
 export async function getTravelPlans(userId: number) {
- 
+  const result = await prisma.travelPlan.findMany({
+    where: {
+      userId,
+    },
+    select: {
+      id: true,
+      title: true,
+      destinationCity: true,
+      destinationCountry: true,
+      startDate: true,
+      endDate: true,
+      budget: true,
+    },
+  });
+
+  return result;
 }

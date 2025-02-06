@@ -1,0 +1,1 @@
+{"root":["./solution/travelplan.ts","./solution/user.ts","./src/index.ts","./src/db/setup.ts","./src/db/travelplan.ts","./src/db/user.ts","./src/db/__tests__/db.test.ts"],"errors":true,"version":"5.7.3"}
