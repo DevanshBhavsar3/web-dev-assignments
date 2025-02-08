@@ -3,6 +3,8 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import LabelledInput from "./LabelledInput";
+import Button from "./Button";
 
 export default function Signin() {
   const router = useRouter();
@@ -34,25 +36,17 @@ export default function Signin() {
   return (
     <div className="flex justify-center items-center h-screen text-black">
       <form className="flex flex-col justify-center items-start h-screen gap-2">
-        <label htmlFor="email" className="text-white">
-          Email
-        </label>
-        <input type="text" name="email" id="email" ref={email} />
-
-        <label htmlFor="password" className="text-white">
-          Password
-        </label>
-        <input type="text" name="password" id="password" ref={password} />
+        <LabelledInput
+          type="text"
+          label="Email"
+          reference={email}
+          placeholder="e.g. name@email.com"
+        />
+        <LabelledInput type="password" label="Password" reference={password} />
 
         {error && <span className="text-white">{error}</span>}
 
-        <button
-          type="submit"
-          className="w-full text-center bg-white text-black"
-          onClick={handleSubmit}
-        >
-          Sign in
-        </button>
+        <Button type="submit" label="Sign in" onClick={handleSubmit} />
       </form>
     </div>
   );
