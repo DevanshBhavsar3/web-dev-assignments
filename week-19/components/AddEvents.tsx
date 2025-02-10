@@ -3,15 +3,30 @@
 import { useRef, useState } from "react";
 import LabelledInput from "./LabelledInput";
 import Button from "./Button";
+import axios from "axios";
+import { useSession } from "next-auth/react";
 
 export default function AddEvent() {
+  const session = useSession();
   const [modalVisibility, setModalVisibility] = useState<boolean>(false);
   const title = useRef<HTMLInputElement | null>(null);
   const description = useRef<HTMLInputElement | null>(null);
   const date = useRef<HTMLInputElement | null>(null);
   const location = useRef<HTMLInputElement | null>(null);
 
-  function handleAddEvent(e: MouseEvent) {}
+  async function handleAddEvent(e: MouseEvent) {
+    e.preventDefault();
+
+    const response = await axios.post("/api/event", {
+      title: title.current?.value,
+      description: description.current?.value,
+      date: date.current?.value,
+      location: location.current?.value,
+      createdById: session.data?.user?.id,
+    });
+
+    console.log(response);
+  }
 
   return (
     <div>

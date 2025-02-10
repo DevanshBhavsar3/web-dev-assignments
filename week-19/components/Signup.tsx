@@ -28,10 +28,14 @@ export default function Signup() {
         password: password.current.value,
       });
 
-      router.push("/");
+      if (response.data.error) {
+        setError(response.data.error);
+      } else {
+        router.push("/signin");
+      }
     } catch (e) {
       if (e instanceof AxiosError) {
-        setError(e.request.data.error);
+        setError("Cannot sign up.");
       }
     }
   }

@@ -1,21 +1,32 @@
 import prisma from "@/app/lib/prismadb";
+import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
+import z from "zod";
 
 export async function POST(req: NextRequest) {
-  const { username, email, password } = await req.json();
+  const requiredBody = z.object({
+    username: z.string(),
+    email: z.string().email(),
+    password: z.string(),
+  });
+  const body = await req.json();
+  const parsedBody = requiredBody.safeParse(body);
 
-  if (!username || !email || !password) {
+  if (!parsedBody.success) {
     return NextResponse.json({ error: "Please provide valid credentials." });
   }
 
-  const result = await prisma.user.create({
-    data: {
-      username,
-      email,
-      password,
-    },
-  });
+  try {
+    await prisma.user.create({
+      data: {
+        username: parsedBody.data.username,
+        email: parsedBody.data.email,
+        password: parsedBody.data.password,
+      },
+    });
 
-  console.log(result);
-  return NextResponse.json({ message: "Signed up." });
+    return NextResponse.json({ message: "Signed up." });
+  } catch (e) {
+    return NextResponse.json({ error: "Email already exists." });
+  }
 }
